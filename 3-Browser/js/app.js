@@ -27,7 +27,7 @@ const datosBusqueda = {
 
 //eventos
 document.addEventListener('DOMContentLoaded',()=>{
-    mostrarAutos(); //muestra los autos al cargar
+    mostrarAutos(autos); //muestra los autos al cargar
 
     //llena las opciones de anios
     llenarSelect();
@@ -46,32 +46,39 @@ year.addEventListener('change',e=>{
 
 minimo.addEventListener('change',e=>{
     datosBusqueda.minimo=e.target.value;
+    filtrarAuto();
 });
 
 maximo.addEventListener('change',e=>{
     datosBusqueda.maximo=e.target.value;
+    filtrarAuto();
 });
 
 puertas.addEventListener('change',e=>{
-    datosBusqueda.puertas=e.target.value;
+    datosBusqueda.puertas=parseInt(e.target.value);
+    filtrarAuto();
 });
 
 transmision.addEventListener('change',e=>{
     datosBusqueda.transmision=e.target.value;
+    filtrarAuto();
 });
 
 color.addEventListener('change',e=>{
     datosBusqueda.color=e.target.value;
-    console.log(datosBusqueda)
+    filtrarAuto();
 });
 
 
 
 
 //funciones
-function mostrarAutos(){
-    autos.forEach(auto => {
+function mostrarAutos(autos){
 
+    //Elimina el HTML previo
+    limpiarHTML();
+
+    autos.forEach(auto => {
         const{marca,modelo,year,puertas,precio,color,transmision}=auto;
         const autoHTML=document.createElement('p');
         autoHTML.textContent=`
@@ -82,6 +89,12 @@ function mostrarAutos(){
         //Insertar resultado en el html
         resultado.appendChild(autoHTML);
     });
+}
+
+function limpiarHTML(){
+    while(resultado.firstChild){
+        resultado.removeChild(resultado.firstChild);
+    }
 }
 
 //genera años del select
@@ -96,9 +109,24 @@ function llenarSelect(){
 
 //funcion que filtra en base a la busqueda
 function filtrarAuto(){
-    const resultado=autos.filter(filtrarMarcar).filter(filtrarYear)
+    const resultado=autos.filter(filtrarMarcar).filter(filtrarYear).filter(filtrarMinimo).filter(filtrarMaximo)
+    .filter(filtrarPuertas).filter(filtrarTransmision).filter(filtrarColor)
 
-    console.log(resultado)
+    
+
+    if(resultado.length){
+        mostrarAutos(resultado);
+    }else{
+        noResultado();
+    }
+}
+
+function noResultado(){
+    limpiarHTML();
+    const noResultado=document.createElement('div');
+    noResultado.classList.add('alerta','error');
+    noResultado.textContent='No Hay Resultados, intenta con otros terminos de busqueda';
+    resultado.appendChild(noResultado);
 }
 
 function filtrarMarcar(auto){
@@ -114,6 +142,46 @@ function filtrarYear(auto){
     
     if(year){
         return auto.year ===year;
+    }
+    return auto;
+}
+
+function filtrarMinimo(auto){
+    const {minimo}=datosBusqueda;
+    if(minimo){
+        return auto.precio >= minimo;
+    }
+    return auto;
+}
+
+function filtrarMaximo(auto){
+    const{maximo}=datosBusqueda;
+    if(maximo){
+        return auto.precio <= maximo;
+    }
+    return auto;
+}
+
+function filtrarPuertas(auto){
+    const{puertas}=datosBusqueda;
+    if(puertas){
+        return auto.puertas===puertas;
+    }
+    return auto;
+}
+
+function filtrarTransmision(auto){
+    const{transmision}=datosBusqueda;
+    if(transmision){
+        return auto.transmision===transmision;
+    }
+    return auto;
+}
+
+function filtrarColor(auto){
+    const{color}=datosBusqueda;
+    if(color){
+        return auto.color===color;
     }
     return auto;
 }
