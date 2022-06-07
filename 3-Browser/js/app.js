@@ -112,8 +112,6 @@ function filtrarAuto(){
     const resultado=autos.filter(filtrarMarcar).filter(filtrarYear).filter(filtrarMinimo).filter(filtrarMaximo)
     .filter(filtrarPuertas).filter(filtrarTransmision).filter(filtrarColor)
 
-    
-
     if(resultado.length){
         mostrarAutos(resultado);
     }else{
