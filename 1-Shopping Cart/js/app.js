@@ -21,6 +21,11 @@ function cargarEventListeners(){
         articulosCarrito=[] //reeseteamos el arreglo
         limpiarHTML(); //Eliminamos todo el HTML
     });
+
+    document.addEventListener('DOMContentLoaded',()=>{
+        articulosCarrito=JSON.parse(localStorage.getItem('articulos')) || [];
+        carritoHTML()
+    });
 }
 
 function agregarCurso(e){
@@ -42,10 +47,7 @@ function eliminarCurso(e){
         
         //Elimina del arreglo por el data-id
         articulosCarrito=articulosCarrito.filter(curso => curso.id !== cursoId);
-        console.log(articulosCarrito);
-
         carritoHTML(); //Iterar sobre el carrito y mostrar su HTM
-
     }
 }
 
@@ -108,10 +110,12 @@ function carritoHTML(){
             </td>
 
         `;
-
         //Agrega el HTML del carrito en tbody
         contenedorCarrito.appendChild(row);
+        
     });
+
+    sincronizarStorage();
 }
 
 //Elimina los cursos del tbody
@@ -126,3 +130,6 @@ function limpiarHTML(){
     }
 }
 
+function sincronizarStorage(){
+    localStorage.setItem('articulos',JSON.stringify(articulosCarrito));
+}
