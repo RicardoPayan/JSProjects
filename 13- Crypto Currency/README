@@ -1,0 +1,12 @@
+Crypto Currency APP.
+You can consult the price of the top ten Market Cap coins. 
+The currencys avaibles are USD,MXN,GBP,EUR.
+
+The app show the next information about the CryptoCurrency:
+-Price
+-High day price
+-Low day price
+-Last 24 hours percentage change
+-Last update.
+
+Made with CryptoCompare API.
