@@ -77,8 +77,6 @@ function mostrarPlatillos(platillos){
     platillos.forEach(platillo => {
         const {id,nombre,precio,categoria} = platillo;
 
-        console.log(categoria)
-
         const row = document.createElement('DIV');
         row.classList.add('row','py-3','border-top');
         
@@ -94,12 +92,59 @@ function mostrarPlatillos(platillos){
         categoriaPlatillo.classList.add('col-md-3');
         categoriaPlatillo.textContent = categorias[categoria]
         
-        
+        const inputCantidad = document.createElement('input');
+        inputCantidad.type = 'number';
+        inputCantidad.min = 0;
+        inputCantidad.value = 0;
+        inputCantidad.id = `producto-${id}`;
+        inputCantidad.classList.add('form-control');
+
+        //Funcion que detecta la cantidad y el platillo que se esta agregando
+        inputCantidad.onchange = function(){
+            const cantidad = parseInt(inputCantidad.value);
+            agregarPlatillo({...platillo,cantidad}); //Creando un objeto que tiene todo lo de platillo y que agrega la cantidad
+        }
+
+        const agregar = document.createElement('div');
+        agregar.classList.add('col-md-2');
+        agregar.appendChild(inputCantidad);
 
         row.appendChild(nombrePlatillo);
         row.appendChild(precioPlatillo);
         row.appendChild(categoriaPlatillo);
+        row.appendChild(agregar);
         
         contenido.appendChild(row);
     });
+}
+
+function agregarPlatillo(producto){
+    //Extraer el pedido actual
+    let {pedido} = cliente;
+
+    //Revisar que la cantidad sea mayor a 0
+    if(producto.cantidad > 0){
+
+        //Comprueba si el elemento ya existe en el array
+        if(pedido.some(articulo => articulo.id === producto.id)){
+            //El articulo ya existe, hay que actualizar la cantidad
+            const pedidoActualizado = pedido.map(articulo => {
+                if(articulo.id === producto.id){
+                    articulo.cantidad = producto.cantidad;
+                }
+                return articulo;
+            });
+            //Se asigna el nuevo array a cliente.pedido
+            cliente.pedido =[...pedidoActualizado];
+        }else{
+            //El articulo no existe, lo agregamos al array de pedido
+            cliente.pedido = [...pedido,producto];
+        }
+        
+    }else{
+        //Eliminar elementos cuando la cantidad es cero
+        const resultado = pedido.filter(articulo => articulo.id !== producto.id);
+        cliente.pedido = [...resultado];
+    }
+
 }
