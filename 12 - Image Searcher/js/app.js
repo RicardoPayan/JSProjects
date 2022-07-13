@@ -24,7 +24,7 @@ function validarFormulario(e){
     buscarImagenes();
 }
 
-function buscarImagenes(){
+async function buscarImagenes(){
     
     const termino = document.querySelector('#termino').value;
     const terminoSinEspacios =  termino.replace(/ /g,"+");
@@ -34,13 +34,15 @@ function buscarImagenes(){
                     &page=${paginaActual}`;
 
 
-    fetch(url)
-        .then(respuesta => respuesta.json())
-        .then(resultado=>{
-            totalPaginas = calcularPaginas(resultado.totalHits);
-            mostrarImagenes(resultado.hits);
-        })
-    
+   try {
+        const respuesta = await fetch(url);
+        const resultado = await respuesta.json();
+        totalPaginas = calcularPaginas(resultado.totalHits);
+        mostrarImagenes(resultado.hits);
+
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 //Generador que va registrar la cantidad de elementos de acuerdo a las paginas
