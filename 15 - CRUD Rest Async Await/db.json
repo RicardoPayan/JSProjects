@@ -1,11 +1,25 @@
 {
   "clientes": [
     {
-      "nombre": "Juan NUEVO!",
-      "email": "correo2@correo.com",
-      "telefono": "12",
-      "empresa": "12212",
-      "id": 26
+      "nombre": "Ricardo Payan",
+      "email": "payan@payan.com",
+      "telefono": "1414123",
+      "empresa": "Easy Gym",
+      "id": 27
+    },
+    {
+      "nombre": "Eber",
+      "email": "x@x.com",
+      "telefono": "12424",
+      "empresa": "Pollo loco",
+      "id": 28
+    },
+    {
+      "nombre": "Santiago Payan",
+      "email": "santiago@payan.com",
+      "telefono": "666",
+      "empresa": "Easy Gym",
+      "id": 29
     }
   ]
 }
